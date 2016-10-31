@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>
+    DFM Admin: Leagues
+  </title>
+</head>
+<body>
+  <div id="header">
+    <div id="title"><h1> Daily Fantasy Mashups ADMIN </h1></div><!-- end title -->
+    <div id="team"><h1>Leagues </h1></div><!-- end team -->
+  </div><!-- end header -->
+
+  <div id="teamUpdate">
+    <div id="fileUploadHeader">
+      Leagues
+    </div><!-- end fileUploadHeader -->
+    <div id="fileUploadContent">
+      <ul id="teamName" name="teamName">
+      </ul>
+    </div><!-- end fileUploadContent -->
+  </div><!-- end fileUpload -->
+
+</body>
+<style>
+* {
+  margin: auto 0;
+}
+
+body {
+  background-color: #ECE9F2;
+}
+
+#header {
+  color: #19c589;
+  background-color: #2f3036;
+  height: 75px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#title {
+  padding: 15px;
+  float: left;
+}
+
+#team {
+  padding: 15px;
+  float: right;
+}
+
+#teamUpdate {
+  background-color: #fff;
+  display: block;
+  margin: auto;
+  position: absolute;
+  width: 30%;
+  height: 50%;
+  overflow: auto;
+  top: 0; left: 0; bottom: 0; right: 0;
+  border: 0px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 10px;
+}
+
+#fileUploadHeader {
+  color: #19c589;
+  width: 100%;
+  background-color: #2f3036;
+  text-align: center;
+  font-size: 30px;
+  padding: 15px 0 15px 0;
+}
+
+#fileUploadContent {
+  display: flex;
+  min-height: 25vh;
+  padding: 50px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#teamName {
+  margin: 0px;
+  font-size: 24px;
+}
+
+#uploadStatus {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  margin-top: -40px;
+}
+
+</style>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+<script>
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyA6SF4ILoHjnxZcQ6MfK6idY7eB990qBCM",
+  authDomain: "daily-fantasy-mashups.firebaseapp.com",
+  databaseURL: "https://daily-fantasy-mashups.firebaseio.com/",
+  storageBucket: "daily-fantasy-mashups.appspot.com",
+  messagingSenderId: "907137854148"
+};
+firebase.initializeApp(config);
+
+// Get elements
+var uploader = document.getElementById('uploadStatus');
+var fileButton = document.getElementById('fileUploadButton');
+
+// Listen for file selection
+fileButton.addEventListener('change', function(e) {
+
+  // Get file
+  var file = e.target.files[0];
+
+  // Create a storage ref
+  var teamName = document.getElementById('teamName').value;
+  var storageRef = firebase.storage().ref('Team/' + teamName + '/' + file.name)
+  var databaseRef = firebase.database().ref('Team/' + teamName + '/' + 'logo')
+
+  // Upload file
+  var task = storageRef.put(file);
+  var task2 =  databaseRef.set(file);
+
+  // Update progress bar
+  task.on('state_changed',
+    function progress(snapshot) {
+      var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      uploader.value = percentage;
+    },
+
+    function error(err) {
+      alert('There was an error uploading the file!');
+    },
+
+    function complete() {
+      alert(teamName + '/' + file.name + ' updated!');
+      window.location.assign('addeditteam.html');
+   }
+  );
+});
+</script>
+</html>

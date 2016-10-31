@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>
+    DFM Admin: Add/Edit League
+  </title>
+</head>
+<body>
+  <div id="header">
+    <div id="title"><h1> Daily Fantasy Mashups ADMIN </h1></div><!-- end title -->
+    <div id="page"><h1>Add/Edit League </h1></div><!-- end league -->
+  </div><!-- end header -->
+
+  <div id="contentBox">
+    <div id="fileUploadHeader">
+      Add/Edit League
+    </div><!-- end fileUploadHeader -->
+    <div id="fileUploadContent">
+      <select id="leagueName" name="leagueName">
+        <option value=""> Select a League </option>
+        <option value="NFL"> NFL </option>
+        <option value="MLB"> MLB </option>
+        <option value="NBA"> NBA </option>
+        <option value="NHL"> NHL </option>
+      </select>
+      <input type="file" value="upload" id="fileUploadButton" onclick="save()" />
+      <br>
+      <progress value="0" max="100" id="uploadStatus">0%</progress>
+      <input id="backButton" type="button" onclick="goBack()" value="Back to Leagues">
+    </div><!-- end fileUploadContent -->
+  </div><!-- end contentBox -->
+
+
+
+</body>
+<style>
+* {
+  margin: auto 0;
+}
+
+body {
+  background-image: url('images/sportsBG.jpg');
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+#header {
+  color: #19c589;
+  background-color: #2f3036;
+  height: 75px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#title {
+  padding: 15px;
+  float: left;
+}
+
+#page {
+  padding: 15px;
+  float: right;
+}
+
+#contentBox {
+  background-color: #fff;
+  display: block;
+  margin: auto;
+  position: absolute;
+  width: 30%;
+  height: 50%;
+  overflow: auto;
+  top: 0; left: 0; bottom: 0; right: 0;
+  border: 0px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 10px;
+}
+
+#fileUploadHeader {
+  color: #19c589;
+  width: 100%;
+  background-color: #2f3036;
+  text-align: center;
+  font-size: 30px;
+  padding: 15px 0 15px 0;
+}
+
+#fileUploadContent {
+  display: flex;
+  min-height: 25vh;
+  padding: 50px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#leagueName {
+  margin: 0px;
+  font-size: 24px;
+}
+
+#uploadStatus {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  margin-top: -40px;
+}
+
+#backButton {
+  position: absolute;
+  bottom: 1%;
+  left: 35%;
+  border-radius: 10px;
+}
+
+</style>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+<script>
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyA6SF4ILoHjnxZcQ6MfK6idY7eB990qBCM",
+  authDomain: "daily-fantasy-mashups.firebaseapp.com",
+  databaseURL: "https://daily-fantasy-mashups.firebaseio.com/",
+  storageBucket: "daily-fantasy-mashups.appspot.com",
+  messagingSenderId: "907137854148"
+};
+firebase.initializeApp(config);
+
+// Get elements
+var uploader = document.getElementById('uploadStatus');
+var fileButton = document.getElementById('fileUploadButton');
+
+// Listen for file selection
+fileButton.addEventListener('change', function(e) {
+
+  // Get file
+  var file = e.target.files[0];
+
+  // Create a storage ref
+  var leagueName = document.getElementById('leagueName').value;
+  var storageRef = firebase.storage().ref('League/' + leagueName + '/' + file.name)
+  var database = firebase.database();
+
+  // Upload file
+  var task = storageRef.put(file);
+
+  // Update progress bar
+  task.on('state_changed',
+    function progress(snapshot) {
+      var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      uploader.value = percentage;
+    },
+
+    function error(err) {
+      alert('There was an error uploading the file!');
+    },
+
+    function complete() {
+      function writeUserData(imageUrl) {
+        firebase.database().ref('Leagues/' + leagueName).set({
+          logo: file.name
+        });
+      alert(leagueName + '/' + file.name + ' updated!');
+      }
+      // window.location.assign('leagues.html');
+   }
+  );
+});
+
+function goBack() {
+  location.href='leagues.html';
+}
+
+</script>
+</html>

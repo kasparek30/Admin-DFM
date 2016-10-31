@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>
+    DFM Admin: MLB Teams
+  </title>
+</head>
+<body>
+  <div id="header">
+    <div id="title"><h1> Daily Fantasy Mashups ADMIN </h1></div><!-- end title -->
+    <div id="page"><h1> MLB Teams </h1></div><!-- end team -->
+  </div><!-- end header -->
+
+  <div id="contentBox">
+    <div id="contentHeader">
+      MLB Teams
+    </div><!-- end contentHeader -->
+    <div id="contentBody">
+      <ul id="teamName" name="teamName">
+        <li id="mlb" class="hide"><h4><a href="mlb.html"> Arizona Diamondbacks </a></h4><div id="editDelete"><a href="#">edit</a>&nbsp; &nbsp;<a href="#">delete</a></li></div>
+      </ul>
+        <input id="backLeague" type="button" onclick="goBack()" value="Back to Leagues List">
+    </div><!-- end contentBody -->
+  </div><!-- end contentBox -->
+
+</body>
+<style>
+* {
+  margin: auto 0;
+}
+
+body {
+  background-image: url('images/sportsBG.jpg');
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+#header {
+  color: #19c589;
+  background-color: #2f3036;
+  height: 75px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#title {
+  padding: 15px;
+  float: left;
+}
+
+#page {
+  padding: 15px;
+  float: right;
+}
+
+#contentBox {
+  background-color: #fff;
+  display: block;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 50%;
+  overflow: auto;
+  top: 0; left: 0; bottom: 0; right: 0;
+  border: 0px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 10px;
+}
+
+#contentHeader {
+  color: #19c589;
+  width: 100%;
+  background-color: #2f3036;
+  text-align: center;
+  font-size: 30px;
+  padding: 15px 0 15px 0;
+}
+
+#contentBody {
+  padding: 10px;
+}
+
+#teamName {
+  font-size: 24px;
+}
+
+#editDelete {
+  padding-left: 50px;
+  align: right;
+}
+
+#backLeague {
+  position: absolute;
+  bottom: 1%;
+  left: 35%;
+  border-radius: 10px;
+}
+
+</style>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+<script>
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyA6SF4ILoHjnxZcQ6MfK6idY7eB990qBCM",
+  authDomain: "daily-fantasy-mashups.firebaseapp.com",
+  databaseURL: "https://daily-fantasy-mashups.firebaseio.com/",
+  storageBucket: "daily-fantasy-mashups.appspot.com",
+  messagingSenderId: "907137854148"
+};
+firebase.initializeApp(config);
+
+function goBack() {
+  location.href='leagues.html';
+}
+
+</script>
+</html>
