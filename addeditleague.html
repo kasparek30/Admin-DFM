@@ -24,7 +24,7 @@
         <option value="NBA"> NBA </option>
         <option value="NHL"> NHL </option>
       </select>
-      <input type="file" value="upload" id="fileUploadButton" onclick="save()" />
+      <input type="file" value="upload" id="fileUploadButton" />
       <br>
       <progress value="0" max="100" id="uploadStatus">0%</progress>
       <input id="backButton" type="button" onclick="goBack()" value="Back to Leagues">
@@ -127,6 +127,8 @@ var config = {
 };
 firebase.initializeApp(config);
 
+var database = firebase.database();
+
 // Get elements
 var uploader = document.getElementById('uploadStatus');
 var fileButton = document.getElementById('fileUploadButton');
@@ -139,8 +141,12 @@ fileButton.addEventListener('change', function(e) {
 
   // Create a storage ref
   var leagueName = document.getElementById('leagueName').value;
+  var fileName = file.name - '.png';
   var storageRef = firebase.storage().ref('League/' + leagueName + '/' + file.name)
-  var database = firebase.database();
+  var logoPath = file.name;
+  var logoRef = firebase.database().ref().child('League/' + leagueName + '/' + 'Logo File');
+
+  logoRef.set(logoPath);
 
   // Upload file
   var task = storageRef.put(file);
@@ -157,14 +163,9 @@ fileButton.addEventListener('change', function(e) {
     },
 
     function complete() {
-      function writeUserData(imageUrl) {
-        firebase.database().ref('Leagues/' + leagueName).set({
-          logo: file.name
-        });
       alert(leagueName + '/' + file.name + ' updated!');
+      window.location.assign('leagues.html');
       }
-      // window.location.assign('leagues.html');
-   }
   );
 });
 
